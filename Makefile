@@ -1,36 +1,39 @@
-BIN := bluelion
-
-GOPATH := $(shell go env GOPATH)
-
 ifeq ($(OS),Windows_NT)
-    GO_FILES := $(shell dir /S /B *.go)
-    GO_DEPS := $(shell dir /S /B go.mod go.sum)
-    CLEAN := del
+    SOURCES := $(shell dir /S /B *.go)
 else
-    GO_FILES := $(shell find . -name '*.go')
-    GO_DEPS := $(shell find . -name go.mod -o -name go.sum)
-    CLEAN := rm -f
+    SOURCES := $(shell find . -name '*.go')
 endif
 
-$(BIN): $(GO_FILES) $(GO_DEPS)
-	$(MAKE) pretty
+ifeq ($(shell uname),Darwin)
+    GOOS = darwin
+    GOARCH = amd64
+    EXEEXT =
+else ifeq ($(shell uname),Linux)
+    GOOS = linux
+    GOARCH = amd64
+    EXEEXT =
+else ifeq ($(OS),Windows_NT)
+    GOOS = windows
+    GOARCH = amd64
+    EXEEXT = .exe
+endif
+
+APP := bluelion$(EXEEXT)
+TARGET := ./dist/bluelion_$(GOOS)_$(GOARCH)_v1/$(APP)
+
+$(APP): $(TARGET)
+	cp $< $@
+
+$(TARGET): $(SOURCES)
+	gofumpt -w $(SOURCES)
+	goreleaser build --single-target --snapshot --clean
 	go vet ./...
-	go build -o $(BIN) cmd/main.go
 
-.PHONY: test
-test: $(BIN)
-	./$(BIN) --verbose
-
-.PHONY: pretty
-pretty: $(GO_FILES)
-	gofumpt -w $^
-
-.PHONY: install
-install: $(GOPATH)/bin/$(BIN)
-
-$(GOPATH)/bin/$(BIN): $(BIN)
-	mv $(BIN) $(GOPATH)/bin/$(BIN)
+all:
+	goreleaser build --snapshot --clean
 
 .PHONY: clean
 clean:
-	$(CLEAN) $(BIN)
+	rm -f bluelion
+	rm -f $(TARGET)
+	rm -rf dist
