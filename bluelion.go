@@ -49,7 +49,7 @@ func dowork(config Config) error {
 	var currentBlock []string
 
 	for scanner.Scan() {
-		line := scanner.Text()
+		line := strings.Trim(scanner.Text()," \t")
 		if line != "" {
 			currentBlock = append(currentBlock, line)
 		} else {
