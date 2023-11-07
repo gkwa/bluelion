@@ -9,7 +9,7 @@ builds:
   - linux
   - windows
   - darwin
-  main: cmd/bluelion/main.go
+  main: cmd/main.go
   goarch:
   - amd64
   binary: bluelion
