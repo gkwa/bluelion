@@ -37,6 +37,13 @@ func dowork(config Config) error {
 	}
 	defer inputFile.Close()
 
+	// Create a temporary file for writing
+	tempFile, err := os.CreateTemp("", "tempfile-*.txt")
+	if err != nil {
+		return fmt.Errorf("error creating temporary file: %v", err)
+	}
+	defer tempFile.Close()
+
 	scanner := bufio.NewScanner(inputFile)
 	var blocks []string
 	var currentBlock []string
@@ -67,15 +74,16 @@ func dowork(config Config) error {
 
 	sortedResult = strings.TrimRight(sortedResult, "\n") + "\n"
 
-	outputFile, err := os.Create(outputFilePath)
+	_, err = tempFile.WriteString(sortedResult)
 	if err != nil {
-		return fmt.Errorf("error creating the output file: %v", err)
+		return fmt.Errorf("error writing the sorted data to the temporary file: %v", err)
 	}
-	defer outputFile.Close()
 
-	_, err = outputFile.WriteString(sortedResult)
+	tempFile.Close()
+
+	err = os.Rename(tempFile.Name(), outputFilePath)
 	if err != nil {
-		return fmt.Errorf("error writing the sorted data to the output file: %v", err)
+		return fmt.Errorf("error renaming temporary file: %v", err)
 	}
 
 	return nil
