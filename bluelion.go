@@ -19,7 +19,7 @@ type Config struct {
 func Main(config Config) int {
 	slog.Debug("bluelion", "test", true)
 
-	err := dowork(config)
+	err := rewritePretty(config)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return 1
@@ -27,7 +27,7 @@ func Main(config Config) int {
 	return 0
 }
 
-func dowork(config Config) error {
+func rewritePretty(config Config) error {
 	inputFilePath := config.InputFilePath
 	outputFilePath := config.OutputFilePath
 
@@ -49,7 +49,7 @@ func dowork(config Config) error {
 	var currentBlock []string
 
 	for scanner.Scan() {
-		line := strings.Trim(scanner.Text()," \t")
+		line := strings.Trim(scanner.Text(), " \t")
 		if line != "" {
 			currentBlock = append(currentBlock, line)
 		} else {
