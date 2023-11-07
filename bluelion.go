@@ -38,7 +38,7 @@ func dowork(config Config) error {
 	defer inputFile.Close()
 
 	// Create a temporary file for writing
-	tempFile, err := os.CreateTemp("", "tempfile-*.txt")
+	tempFile, err := os.CreateTemp("", "bluelion-*.txt")
 	if err != nil {
 		return fmt.Errorf("error creating temporary file: %v", err)
 	}
