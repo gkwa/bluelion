@@ -16,11 +16,15 @@ func main() {
 	flag.BoolVar(&config.Verbose, "v", false, "Enable verbose output (shorthand)")
 
 	flag.StringVar(&config.InputFilePath, "input", "data.txt", "Input file path")
-	flag.StringVar(&config.OutputFilePath, "output", "data.txt", "Output file path")
+	flag.StringVar(&config.OutputFilePath, "output", "", "Output file path (default: input file path)")
 
 	flag.StringVar(&config.LogFormat, "log-format", "", "Log format (text or json)")
 
 	flag.Parse()
+
+	if config.OutputFilePath == "" {
+		config.OutputFilePath = config.InputFilePath
+	}
 
 	if config.Verbose || config.LogFormat != "" {
 		if config.LogFormat == "json" {
