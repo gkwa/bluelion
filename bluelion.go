@@ -3,7 +3,6 @@ package bluelion
 import (
 	"bufio"
 	"fmt"
-	"log/slog"
 	"os"
 	"strings"
 )
@@ -16,9 +15,14 @@ type Config struct {
 }
 
 func Main(config Config) int {
-	slog.Debug("bluelion", "test", true)
+	filePath := config.OutputFilePath
+	_, err := backupFile(filePath)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return 1
+	}
 
-	err := rewritePretty(config)
+	err = rewritePretty(config)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return 1

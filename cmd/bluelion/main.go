@@ -15,14 +15,23 @@ func main() {
 	flag.BoolVar(&config.Verbose, "verbose", false, "Enable verbose output")
 	flag.BoolVar(&config.Verbose, "v", false, "Enable verbose output (shorthand)")
 
-	flag.StringVar(&config.InputFilePath, "input", "data.txt", "Input file path")
-	flag.StringVar(&config.OutputFilePath, "output", "", "Output file path (default: input file path)")
-
 	flag.StringVar(&config.LogFormat, "log-format", "", "Log format (text or json)")
 
 	flag.Parse()
 
-	if config.OutputFilePath == "" {
+	args := flag.Args()
+
+	if len(args) == 0 {
+		printUsage()
+		os.Exit(1)
+	}
+
+	// Assuming the order of arguments is: inputFilePath, outputFilePath
+	config.InputFilePath = args[0]
+
+	if len(args) > 1 {
+		config.OutputFilePath = args[1]
+	} else {
 		config.OutputFilePath = config.InputFilePath
 	}
 
@@ -36,4 +45,8 @@ func main() {
 
 	code := bluelion.Main(config)
 	os.Exit(code)
+}
+
+func printUsage() {
+	println("Usage: program [-v|--verbose] [--log-format=text|json] inputFilePath [outputFilePath]")
 }
