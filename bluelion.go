@@ -66,7 +66,7 @@ func rewritePretty(config Config) error {
 
 	for i, block := range blocks {
 		lines := strings.Split(block, "\n")
-		sort.Strings(lines)
+		sortFcn(&lines)
 		blocks[i] = strings.Join(lines, "\n")
 	}
 
@@ -87,4 +87,8 @@ func rewritePretty(config Config) error {
 	}
 
 	return nil
+}
+
+func sortFcn(lines *[]string) {
+	sort.Strings(*lines)
 }
