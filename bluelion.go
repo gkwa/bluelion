@@ -66,7 +66,7 @@ func rewritePretty(config Config) error {
 
 	for i, block := range blocks {
 		lines := strings.Split(block, "\n")
-		sortFcn(&lines)
+		sortLinesCaseInsensitive(&lines)
 		blocks[i] = strings.Join(lines, "\n")
 	}
 
@@ -89,6 +89,8 @@ func rewritePretty(config Config) error {
 	return nil
 }
 
-func sortFcn(lines *[]string) {
-	sort.Strings(*lines)
+func sortLinesCaseInsensitive(lines *[]string) {
+	sort.Slice(*lines, func(i, j int) bool {
+		return strings.ToLower((*lines)[i]) < strings.ToLower((*lines)[j])
+	})
 }
