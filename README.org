@@ -2,7 +2,7 @@ Keep data.cypher from https://github.com/taylormonacelli/anythingflorida
 organized by sorting its blocks
 
 #+begin_example
-git clone https://github.com/taylormonacelli/anythingflorida
+git clone https://github.com/taylormonacelli/anythingflorida/data.cypher
 cd anythingflorida
 bluelion -v data.cypher
 #+end_example
