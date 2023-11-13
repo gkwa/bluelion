@@ -1,6 +1,8 @@
-Keep data.cypher from https://github.com/taylormonacelli/anythingflorida/data.cypher 
+Keep
+https://github.com/taylormonacelli/anythingflorida/blob/master/data.cypher
 organized by sorting its blocks
 
+Example usage
 #+begin_example
 git clone https://github.com/taylormonacelli/anythingflorida
 cd anythingflorida
